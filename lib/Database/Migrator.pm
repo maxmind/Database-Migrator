@@ -1,5 +1,6 @@
-use strict;
-use warnings;
 package Database::Migrator;
 
-1;
+# ABSTRACT: Core roles for Database::Migrator implementations
+
+__END__
+
