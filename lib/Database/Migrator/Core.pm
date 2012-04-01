@@ -9,6 +9,7 @@ use Database::Migrator::Types qw( ArrayRef Bool Dir File Maybe Str );
 use DBI;
 use Eval::Closure qw( eval_closure );
 use File::Slurp qw( read_file );
+use IPC::Run3 qw( run3 );
 use Log::Dispatch;
 use Moose::Util::TypeConstraints qw( duck_type );
 
@@ -118,7 +119,7 @@ sub install_or_update_schema {
 
     if ( $self->_database_exists() ) {
         my $database = $self->database();
-        $self->_logger()->log("The $database database already exists");
+        $self->_logger()->info("The $database database already exists");
     }
     else {
         $self->_create_database();
@@ -229,7 +230,7 @@ sub _build_pending_migrations {
         sort
             grep { !$ran{ $_->basename() } }
             grep { $_->is_dir() }
-            $self->_migrations_dir()->children( no_hidden => 1 )
+            $self->migrations_dir()->children( no_hidden => 1 )
     ];
 }
 
@@ -239,7 +240,11 @@ sub _build_logger {
     my $outputs
         = $self->quiet()
         ? [ 'Null', min_level => 'emerg' ]
-        : [ 'Screen', min_level => ( $self->verbose() ? 'debug' : 'info' ) ];
+        : [
+        'Screen',
+        min_level => ( $self->verbose() ? 'debug' : 'info' ),
+        newline => 1,
+        ];
 
     return Log::Dispatch->new( outputs => [$outputs] );
 }
