@@ -15,10 +15,13 @@ use Moose::Util::TypeConstraints qw( duck_type );
 
 use Moose::Role;
 
+with 'MooseX::Getopt::Dashes';
+
 requires qw(
     _build_database_exists
     _build_dbh
     _create_database
+    _run_ddl
 );
 
 has database => (
@@ -74,7 +77,8 @@ has __pending_migrations => (
     },
 );
 
-has _dbh => (
+has dbh => (
+    traits   => ['NoGetopt'],
     is       => 'ro',
     isa      => 'DBI::db',
     init_arg => undef,
@@ -82,7 +86,8 @@ has _dbh => (
     builder  => '_build_dbh',
 );
 
-has _logger => (
+has logger => (
+    traits  => ['NoGetopt'],
     is      => 'ro',
     isa     => duck_type( [qw( debug info )] ),
     builder => '_build_logger',
@@ -114,15 +119,18 @@ after BUILD => sub {
         if $self->quiet() && $self->verbose();
 };
 
-sub install_or_update_schema {
+sub create_or_update_database {
     my $self = shift;
 
     if ( $self->_database_exists() ) {
         my $database = $self->database();
-        $self->_logger()->info("The $database database already exists");
+        $self->logger()->info("The $database database already exists");
     }
     else {
         $self->_create_database();
+
+        my $schema_ddl = read_file( $self->schema_file()->stringify() );
+        $self->_run_ddl($schema_ddl);
     }
 
     $self->_run_migrations();
@@ -142,32 +150,36 @@ sub _run_one_migration {
 
     my $name = $migration->basename();
 
-    $self->_logger->info("Running migration - $name");
+    $self->logger->info("Running migration - $name");
 
     my @files = grep { !$_->is_dir() } $migration->children( no_hidden => 1 );
 
-    for my $file ( sort @files ) {
+    for my $file ( sort _numeric_or_alpha_sort @files ) {
         my $basename = $file->basename();
         if ( $file =~ /\.sql/ ) {
-            $self->_logger()->debug(" - running $basename as sql");
+            $self->logger()->debug(" - running $basename as sql");
 
             my $migration_ddl = read_file( $file->stringify() );
 
             $self->_run_ddl($migration_ddl);
         }
         else {
-            $self->_logger()->debug(" - running $basename as perl code");
+            $self->logger()->debug(" - running $basename as perl code");
 
             my $perl = read_file( $file->stringify() );
 
             my $sub = eval_closure( source => $perl );
 
+            next if $self->dry_run();
+
             $sub->($self);
         }
     }
 
-    my $table = $self->_dbh()->quote_identifier( $self->migration_table() );
-    $self->_dbh()->do( "INSERT INTO $table VALUES (?)", undef, $name );
+    return if $self->dry_run();
+
+    my $table = $self->dbh()->quote_identifier( $self->migration_table() );
+    $self->dbh()->do( "INSERT INTO $table VALUES (?)", undef, $name );
 
     return;
 }
@@ -181,18 +193,18 @@ sub _run_command {
     my $stderr = q{};
 
     my $handle_stdout = sub {
-        $self->_logger()->debug(@_);
+        $self->logger()->debug(@_);
 
         $stdout .= $_ for @_;
     };
 
     my $handle_stderr = sub {
-        $self->_logger()->debug(@_);
+        $self->logger()->debug(@_);
 
         $stderr .= $_ for @_;
     };
 
-    $self->_logger()->debug("Running command: [@{$command}]");
+    $self->logger()->debug("Running command: [@{$command}]");
 
     return if $self->dry_run();
 
@@ -217,17 +229,17 @@ sub _build_pending_migrations {
     my $table = $self->migration_table();
 
     my %ran;
-    if ( grep { $_ =~ /\b\Q$table\E\b/ } $self->_dbh()->tables() ) {
-        my $quoted = $self->_dbh()->quote_identifier($table);
+    if ( grep { $_ =~ /\b\Q$table\E\b/ } $self->dbh()->tables() ) {
+        my $quoted = $self->dbh()->quote_identifier($table);
 
         %ran
             = map { $_ => 1 }
-            @{ $self->_dbh()
+            @{ $self->dbh()
                 ->selectcol_arrayref("SELECT migration FROM $quoted") || [] };
     }
 
     return [
-        sort
+        sort _numeric_or_alpha_sort
             grep { !$ran{ $_->basename() } }
             grep { $_->is_dir() }
             $self->migrations_dir()->children( no_hidden => 1 )
@@ -249,4 +261,130 @@ sub _build_logger {
     return Log::Dispatch->new( outputs => [$outputs] );
 }
 
+around _build_dbh => sub {
+    my $orig = shift;
+    my $self = shift;
+
+    my $dbh = $self->$orig(@_);
+
+    $dbh->{RaiseError}         = 1;
+    $dbh->{PrintError}         = 1;
+    $dbh->{PrintWarn}          = 1;
+    $dbh->{ShowErrorStatement} = 1;
+
+    return $dbh;
+};
+
+sub  _numeric_or_alpha_sort {
+    my ( $a_num, $a_alpha ) = $a->basename() =~ /^(\d+)(.+)/;
+    my ( $b_num, $b_alpha ) = $b->basename() =~ /^(\d+)(.+)/;
+
+    $a_num ||= 0;
+    $b_num ||= 0;
+
+    return $a_num <=> $b_num or $a_alpha cmp $b_alpha;
+}
+
 1;
+
+# ABSTRACT: Core role for Database::Migrator implementation classes
+
+__END__
+
+=head1 SYNOPSIS
+
+  package Database::Migrator::SomeDB;
+
+  use Moose;
+  with 'Database::Migrator::Core';
+
+  sub _build_database_exists { ... }
+  sub _build_dbh             { ... }
+  sub _create_database       { ... }
+
+=head1 DESCRIPTION
+
+This role implements the bulk of the migration logic, leaving a few details up
+to DBMS-specific classes.
+
+You can then subclass these DBMS-specific classes to provide defaults for
+various attributes, or to override some of the implementation.
+
+=head1 PUBLIC ATTRIBUTES
+
+This role defines the following public attributes. These attributes may be
+provided via the command line or you can set defaults for them in a subclass.
+
+=over 4
+
+=item * database
+
+The name of the database that will be created or migrated. This is required.
+
+=item * user, password, host, port
+
+These parameters are used when connecting to the database. They are all
+optional.
+
+=item * migration_table
+
+The name of the table which stores the name of applied migrations. This is
+required.
+
+=item * migrations_dir
+
+The directory containing migrations. This is required, but it is okay if the
+directory is empty.
+
+=item * schema_file
+
+The full path to the file containing the initial schema for the database. This
+will be used to create the database if it doesn't already exist. This is required.
+
+=item * verbose
+
+This affects the verbosity of output logging. Defaults to false.
+
+=item * quiet
+
+If this is true, then no output will logged at all. Defaults to false.
+
+=item * dry_run
+
+If this is true, no migrations are actually run. Instead, the code just logs
+what it I<would> do. Defaults to false.
+
+=back
+
+=head1 METHODS
+
+This role provide just one public method, C<create_or_update_database()>.
+
+It will create a new database if none exists.
+
+It will run all unapplied migrations on this schema once it does exist.
+
+=head1 REQUIRED METHODS
+
+If you want to create your own implementation class, you must implement the
+following methods. All of these methods should throw an error
+
+=head2 $migrator->_build_database_exists()
+
+This should return a boolean value indicating whether or not the database
+already exists.
+
+=head2 $migration->_build_dbh()
+
+This should return a new L<DBI> handle by calling C<< DBI->connect(...) >>
+with the appropriate parameters.
+
+=head2 $migration->_create_database()
+
+This should create an I<empty> database. This role will take care of executing
+the DDL for defining the schema.
+
+=head2 $migration->_run_ddl($ddl)
+
+Given a string containing one or more DDL statements, this method must run
+that DDL against the database.
