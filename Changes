@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.03     2012-04-14
+
 - Added missing prereqs on MooseX::Types and MooseX::Types::Path::Class.
 
 
