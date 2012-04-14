@@ -3,7 +3,6 @@ package Database::Migrator::Core;
 use strict;
 use warnings;
 use namespace::autoclean;
-use autodie ':all';
 
 use Database::Migrator::Types qw( ArrayRef Bool Dir File Maybe Str );
 use DBI;
