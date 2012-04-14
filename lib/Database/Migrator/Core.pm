@@ -424,6 +424,3 @@ You can provide a default file name.
 You must return an object with C<debug()> and C<info()> methods.
 
 =back
-
-
-
