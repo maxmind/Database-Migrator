@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- Remove autodie from prereqs since there's nothing in the code that needs it
+  right now.
+
+
 0.01     2012-04-13
 
 - First release upon an unsuspecting world.
