@@ -388,3 +388,42 @@ the DDL for defining the schema.
 
 Given a string containing one or more DDL statements, this method must run
 that DDL against the database.
+
+=head1 OVERRIDEABLE ATTRIBUTES AND METHODS
+
+There are a number of attributes methods in this role that you may wish to
+override in a custom subclass of an implementation.
+
+For any attribute where you provide a default value, make sure to also set C<<
+required => 0 >> as well.
+
+=over 4
+
+=item * database attribute
+
+You can provide a default database name.
+
+=item * user, password, host, and port attributes
+
+You can provide a default values for these connection attributes.
+
+=item * migration_table
+
+You can provide a default table name.
+
+=item * migrations_dir
+
+You can provide a default directory.
+
+=item * schema_file
+
+You can provide a default file name.
+
+=item * _build_logger()
+
+You must return an object with C<debug()> and C<info()> methods.
+
+=back
+
+
+
