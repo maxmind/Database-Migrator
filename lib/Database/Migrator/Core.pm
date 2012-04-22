@@ -89,6 +89,7 @@ has logger => (
     traits  => ['NoGetopt'],
     is      => 'ro',
     isa     => duck_type( [qw( debug info )] ),
+    lazy    => 1,
     builder => '_build_logger',
 );
 
