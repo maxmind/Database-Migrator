@@ -3,6 +3,10 @@ package Database::Migrator::Types;
 use strict;
 use warnings;
 
+use MooseX::Types::Moose;
+use MooseX::Types::Path::Class;
+use Path::Class ();
+
 use parent 'MooseX::Types::Combine';
 
 __PACKAGE__->provide_types_from(
