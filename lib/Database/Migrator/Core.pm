@@ -29,7 +29,7 @@ has database => (
     required => 1,
 );
 
-has [qw( user password host port )] => (
+has [qw( username password host port )] => (
     is      => 'ro',
     isa     => Maybe [Str],
     default => undef,
@@ -110,6 +110,18 @@ has dry_run => (
     isa     => Bool,
     default => 0,
 );
+
+around BUILDARGS => sub {
+    my $orig  = shift;
+    my $class = shift;
+
+    my $p = $class->$orig(@_);
+
+    $p->{username} = delete $p->{user}
+        if exists $p->{user};
+
+    return $p;
+};
 
 sub BUILD { }
 after BUILD => sub {
@@ -321,7 +333,7 @@ provided via the command line or you can set defaults for them in a subclass.
 
 The name of the database that will be created or migrated. This is required.
 
-=item * user, password, host, port
+=item * username, password, host, port
 
 These parameters are used when connecting to the database. They are all
 optional.
