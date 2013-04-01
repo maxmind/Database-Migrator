@@ -10,9 +10,8 @@ use Test::More;
 
     use Moose;
 
-    sub _build_database_exists { }
-    sub _build_dbh             { }
     sub _create_database       { }
+    sub _drop_database         { }
     sub _run_ddl               { }
 
     ::is(
