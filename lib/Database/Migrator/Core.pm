@@ -15,7 +15,6 @@ use Moose::Role;
 with 'MooseX::Getopt::Dashes';
 
 requires qw(
-    _build_database_exists
     _create_database
     _drop_database
     _run_ddl
@@ -225,6 +224,13 @@ sub _build_logger {
         ];
 
     return Log::Dispatch->new( outputs => [$outputs] );
+}
+
+sub _build_database_exists {
+    my $self = shift;
+
+    local $@;
+    return eval { $self->_build_dbh() } ? 1 : 0;
 }
 
 sub _build_dbh {
