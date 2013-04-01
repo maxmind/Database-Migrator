@@ -188,7 +188,7 @@ EOF
 
     $self->_write_ddl_file(
         $dir->file('02-create-bar-table-index.sql'),
-        'CREATE INDEX bar_bar_name ON Bar (bar_name)',
+        'CREATE INDEX bar_bar_name ON bar (bar_name)',
     );
 
     return;
@@ -202,7 +202,7 @@ sub _write_second_migration {
 
     open my $fh, '>', $dir->file('01-create-baz-table-index.sql');
     print {$fh} <<'EOF';
-CREATE INDEX baz_baz_name ON Baz (baz_name);
+CREATE INDEX baz_baz_name ON baz (baz_name);
 EOF
     close $fh;
 
