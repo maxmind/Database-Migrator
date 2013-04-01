@@ -16,8 +16,8 @@ with 'MooseX::Getopt::Dashes';
 
 requires qw(
     _build_database_exists
-    _build_dbh
     _create_database
+    _drop_database
     _run_ddl
 );
 
