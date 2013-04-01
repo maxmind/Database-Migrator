@@ -1,5 +1,14 @@
 {{$NEXT}}
 
+- Renamed the user attribute to username, but the former will still be
+  supported by the constructor.
+
+- Lots of refactorings to the Core role in preparation for
+  Database::Migrator::Pg release.
+
+- Added a class that helps with live tests - Test::Database::Migrator.
+
+
 0.04     2012-04-22
 
 - The logger attribute was not lazy, so it could be built before the quiet
