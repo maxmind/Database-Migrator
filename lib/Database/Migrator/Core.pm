@@ -227,19 +227,21 @@ sub _build_logger {
     return Log::Dispatch->new( outputs => [$outputs] );
 }
 
-around _build_dbh => sub {
-    my $orig = shift;
+sub _build_dbh {
     my $self = shift;
 
-    my $dbh = $self->$orig(@_);
+    my ($driver) = ( ref $self ) =~ /::(\w+)$/;
 
-    $dbh->{RaiseError}         = 1;
-    $dbh->{PrintError}         = 1;
-    $dbh->{PrintWarn}          = 1;
-    $dbh->{ShowErrorStatement} = 1;
-
-    return $dbh;
-};
+    return DBI->connect(
+        'dbi:' . $driver . ':database=' . $self->database(),
+        $self->username(),
+        $self->password(),
+        RaiseError         => 1,
+        PrintError         => 1,
+        PrintWarn          => 1,
+        ShowErrorStatement => 1,
+    );
+}
 
 sub  _numeric_or_alpha_sort {
     my ( $a_num, $a_alpha ) = $a->basename() =~ /^(\d+)(.+)/;
