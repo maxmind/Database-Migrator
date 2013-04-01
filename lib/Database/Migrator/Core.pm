@@ -236,10 +236,12 @@ sub _build_dbh {
         'dbi:' . $driver . ':database=' . $self->database(),
         $self->username(),
         $self->password(),
-        RaiseError         => 1,
-        PrintError         => 1,
-        PrintWarn          => 1,
-        ShowErrorStatement => 1,
+        {
+            RaiseError         => 1,
+            PrintError         => 1,
+            PrintWarn          => 1,
+            ShowErrorStatement => 1,
+        },
     );
 }
 
