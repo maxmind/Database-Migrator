@@ -7,8 +7,6 @@ use namespace::autoclean;
 use Database::Migrator::Types qw( ArrayRef Bool Dir File Maybe Str );
 use DBI;
 use Eval::Closure qw( eval_closure );
-use File::Slurp qw( read_file );
-use IPC::Run3 qw( run3 );
 use Log::Dispatch;
 use Moose::Util::TypeConstraints qw( duck_type );
 
@@ -140,9 +138,7 @@ sub create_or_update_database {
     }
     else {
         $self->_create_database();
-
-        my $schema_ddl = read_file( $self->schema_file()->stringify() );
-        $self->_run_ddl($schema_ddl);
+        $self->_run_ddl( $self->schema_file() );
     }
 
     $self->_run_migrations();
@@ -170,10 +166,7 @@ sub _run_one_migration {
         my $basename = $file->basename();
         if ( $file =~ /\.sql/ ) {
             $self->logger()->debug(" - running $basename as sql");
-
-            my $migration_ddl = read_file( $file->stringify() );
-
-            $self->_run_ddl($migration_ddl);
+            $self->_run_ddl($file);
         }
         else {
             $self->logger()->debug(" - running $basename as perl code");
