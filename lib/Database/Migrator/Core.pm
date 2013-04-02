@@ -345,20 +345,14 @@ It will run all unapplied migrations on this schema once it does exist.
 If you want to create your own implementation class, you must implement the
 following methods. All of these methods should throw an error
 
-=head2 $migrator->_build_database_exists()
-
-This should return a boolean value indicating whether or not the database
-already exists.
-
-=head2 $migration->_build_dbh()
-
-This should return a new L<DBI> handle by calling C<< DBI->connect(...) >>
-with the appropriate parameters.
-
 =head2 $migration->_create_database()
 
 This should create an I<empty> database. This role will take care of executing
 the DDL for defining the schema.
+
+=head2 $migration->_drop_database()
+
+This should drop the database. Right now it is only used for testing.
 
 =head2 $migration->_run_ddl($ddl)
 
@@ -379,7 +373,7 @@ required => 0 >> as well.
 
 You can provide a default database name.
 
-=item * user, password, host, and port attributes
+=item * username, password, host, and port attributes
 
 You can provide a default values for these connection attributes.
 
