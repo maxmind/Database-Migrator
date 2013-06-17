@@ -260,6 +260,15 @@ sub  _numeric_or_alpha_sort {
     return $a_num <=> $b_num or $a_alpha cmp $b_alpha;
 }
 
+=begin Pod::Coverage
+
+  BUILD
+  create_or_update_database
+
+=end Pod::Coverage
+
+=cut
+
 1;
 
 # ABSTRACT: Core role for Database::Migrator implementation classes

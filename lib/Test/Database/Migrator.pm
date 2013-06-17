@@ -255,6 +255,10 @@ sub DEMOLISH {
     $self->_new_migrator()->_drop_database();
 }
 
+=for Pod::Coverage .*
+
+=cut
+
 __PACKAGE__->meta()->make_immutable();
 
 1;

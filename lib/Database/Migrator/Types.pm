@@ -15,3 +15,7 @@ __PACKAGE__->provide_types_from(
 );
 
 1;
+
+=for Pod::Coverage .*
+
+=cut
