@@ -5,7 +5,6 @@ use Test::Fatal;
 use Test::More;
 
 {
-
     package Test::Migrator;
 
     use Moose;
