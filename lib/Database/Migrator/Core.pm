@@ -16,6 +16,7 @@ with 'MooseX::Getopt::Dashes';
 
 requires qw(
     _create_database
+    _driver_name
     _drop_database
     _run_ddl
 );
@@ -236,10 +237,8 @@ sub _build_database_exists {
 sub _build_dbh {
     my $self = shift;
 
-    my ($driver) = ( ref $self ) =~ /::(\w+)$/;
-
     return DBI->connect(
-        'dbi:' . $driver . ':database=' . $self->database(),
+        'dbi:' . $self->_driver_name() . ':database=' . $self->database(),
         $self->username(),
         $self->password(),
         {
@@ -349,6 +348,10 @@ following methods. All of these methods should throw an error
 
 This should create an I<empty> database. This role will take care of executing
 the DDL for defining the schema.
+
+=head2 $migration->_driver_name()
+
+This return a string containing the DBI driver name, such as "mysql" or "Pg".
 
 =head2 $migration->_drop_database()
 

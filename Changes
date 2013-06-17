@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+- Require implementations to provide the driver name rather than trying to
+  guess it from the object's name. This was severely broken if you used a
+  subclass that didn't end with something like "::mysql" or "::Pg".
+
+
 0.06     2013-04-02
 
 - Fixed some documentation errors.
