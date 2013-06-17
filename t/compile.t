@@ -10,9 +10,10 @@ use Test::More;
 
     use Moose;
 
-    sub _create_database       { }
-    sub _drop_database         { }
-    sub _run_ddl               { }
+    sub _create_database { }
+    sub _driver_name     { 'Foo' }
+    sub _drop_database   { }
+    sub _run_ddl         { }
 
     ::is(
         ::exception{ with 'Database::Migrator::Core' },
