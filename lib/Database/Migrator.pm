@@ -173,3 +173,9 @@ still strongly recommend that you make all your migrations idempotent. This is
 much safer. For example, if the process applying migrations is killed, it's
 possible that it will be killed after a migration is applied but before that
 fact has been recorded.
+
+=head1 SUPPORT
+
+Please submit bugs to the CPAN RT system at
+http://rt.cpan.org/NoAuth/Bugs.html?Dist=Database-Migrator or via email at
+bug-database-migrator@rt.cpan.org.
