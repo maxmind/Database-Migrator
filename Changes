@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.08     2013-07-18
+
 - The Core role didn't load File::Slurp, which it needs to run Perl script
   migration files. Fixed by Olaf Alders.
 
