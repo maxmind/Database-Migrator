@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.09     2013-08-03
+
 - Two migrations that started with the same number (01-foo and 01-bar) would
   not be sorted correctly. (But hopefully you never name things in such a
   confusing manner anyway). Patch by Reini Urban. RT #87205.
