@@ -31,8 +31,8 @@ with numbers, they are sorted by these numbers, otherwise they are sorted
 alphabetically.
 
 The migration directory can either contain files with SQL or Perl. If a file
-ends in ".sql", the migration runner code will feed it the `mysql` command
-line utility.
+ends in ".sql", the migration runner code will feed it to the appropriate
+command line utility for your database.
 
 Otherwise the file is assumed to contain Perl code. This code is expected to
 return a single anonymous subroutine when C<eval>ed. This subroutine will then
