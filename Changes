@@ -2,7 +2,7 @@
 
 - Previously, passing any one of username, password, host, or port from the
   command line would set the relevant attribute's value to "1", rather than
-  what you passed. Reported by Lasse Makholm.
+  what you passed. Reported by Lasse Makholm. RT #92726.
 
 - The SQL used to insert a migration into the migration table now uses the
   column name. This allows you to put other columns in the table. Patch by
