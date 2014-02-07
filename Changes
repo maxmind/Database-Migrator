@@ -1,5 +1,10 @@
 {{$NEXT}}
 
+- Previously, passing any one of username, password, host, or port from the
+  command line would set the relevant attribute's value to "1", rather than
+  what you passed. Reported by Lasse Makholm.
+
+
 0.09     2013-08-03
 
 - Two migrations that started with the same number (01-foo and 01-bar) would

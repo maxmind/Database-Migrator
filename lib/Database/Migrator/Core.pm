@@ -15,6 +15,10 @@ use Moose::Role;
 
 with 'MooseX::Getopt::Dashes';
 
+MooseX::Getopt::OptionTypeMap->add_option_type_to_map(
+    Maybe [Str] => '=s',
+);
+
 requires qw(
     _create_database
     _driver_name
