@@ -189,7 +189,7 @@ sub _run_one_migration {
     return if $self->dry_run();
 
     my $table = $self->dbh()->quote_identifier( $self->migration_table() );
-    $self->dbh()->do( "INSERT INTO $table VALUES (?)", undef, $name );
+    $self->dbh()->do( "INSERT INTO $table (migration) VALUES (?)", undef, $name );
 
     return;
 }

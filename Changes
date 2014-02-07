@@ -4,6 +4,10 @@
   command line would set the relevant attribute's value to "1", rather than
   what you passed. Reported by Lasse Makholm.
 
+- The SQL used to insert a migration into the migration table now uses the
+  column name. This allows you to put other columns in the table. Patch by
+  Lasse Makholm. RT #92725.
+
 
 0.09     2013-08-03
 
