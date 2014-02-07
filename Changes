@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.10     2014-02-06
+
 - Previously, passing any one of username, password, host, or port from the
   command line would set the relevant attribute's value to "1", rather than
   what you passed. Reported by Lasse Makholm. RT #92726.
