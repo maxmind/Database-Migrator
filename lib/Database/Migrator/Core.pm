@@ -210,9 +210,8 @@ sub _build_pending_migrations {
     }
 
     return [
-        sort _numeric_or_alpha_sort
-            grep { !$ran{ $_->basename() } }
-            grep { $_->is_dir() }
+        sort _numeric_or_alpha_sort grep { !$ran{ $_->basename() } }
+            grep                         { $_->is_dir() }
             $self->migrations_dir()->children( no_hidden => 1 )
     ];
 }
