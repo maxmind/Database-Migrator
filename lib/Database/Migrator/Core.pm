@@ -139,7 +139,7 @@ sub create_or_update_database {
 
     if ( $self->_database_exists() ) {
         my $database = $self->database();
-        $self->logger()->info("The $database database already exists");
+        $self->logger()->debug("The $database database already exists");
     }
     else {
         $self->_create_database();
@@ -163,7 +163,7 @@ sub _run_one_migration {
 
     my $name = $migration->basename();
 
-    $self->logger->info("Running migration - $name");
+    $self->logger()->info("Running migration - $name");
 
     my @files = grep { !$_->is_dir() } $migration->children( no_hidden => 1 );
 
