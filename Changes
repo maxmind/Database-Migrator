@@ -1,5 +1,9 @@
 {{$NEXT}}
 
+- Changed the logging form Core so that when a database already exists this
+  message is logged at the debug level, not info.
+
+
 0.10     2014-02-06
 
 - Previously, passing any one of username, password, host, or port from the
