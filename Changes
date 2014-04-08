@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.11     2014-04-08
+
 - Changed the logging form Core so that when a database already exists this
   message is logged at the debug level, not info.
 
