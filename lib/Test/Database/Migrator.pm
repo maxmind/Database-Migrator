@@ -3,6 +3,7 @@ package Test::Database::Migrator;
 use strict;
 use warnings;
 use namespace::autoclean;
+use autodie;
 
 our $VERSION = '0.12';
 
@@ -81,7 +82,8 @@ sub _write_ddl_file {
     my $ddl  = shift;
 
     open my $fh, '>', $file;
-    print {$fh} $ddl;
+    print {$fh} $ddl
+        or die $!;
     close $fh;
 }
 
@@ -169,7 +171,9 @@ sub _write_first_migration {
     my $self = shift;
 
     my $dir = $self->_migrations_dir()->subdir('01-first');
+    ## no critic (ValuesAndExpressions::ProhibitLeadingZeros)
     $dir->mkpath( 0, 0755 );
+    ## use critic
 
     my $create_tables = <<'EOF';
 CREATE TABLE bar (
@@ -200,10 +204,12 @@ sub _write_second_migration {
     my $self = shift;
 
     my $dir = $self->_migrations_dir()->subdir('02-second');
+    ## no critic (ValuesAndExpressions::ProhibitLeadingZeros)
     $dir->mkpath( 0, 0755 );
+    ## use critic
 
     open my $fh, '>', $dir->file('01-create-baz-table-index.sql');
-    print {$fh} <<'EOF';
+    print {$fh} <<'EOF' or die $!;
 CREATE INDEX baz_baz_name ON baz (baz_name);
 EOF
     close $fh;
@@ -233,7 +239,9 @@ sub _build_migrations_dir {
     my $self = shift;
 
     my $dir = $self->_tempdir()->subdir('migrations');
+    ## no critic (ValuesAndExpressions::ProhibitLeadingZeros)
     $dir->mkpath( 0, 0755 );
+    ## use critic
 
     return $dir;
 }
@@ -248,7 +256,9 @@ sub DEMOLISH {
     my $self = shift;
 
     if ( $ENV{DATABASE_MIGRATOR_TEST_WAIT} ) {
-        print "\n  Waiting to clean up the test database\n\n";
+        print "\n  Waiting to clean up the test database\n\n"
+            or die $!;
+        ## no critic (InputOutput::ProhibitExplicitStdin)
         my $x = <STDIN>;
     }
 

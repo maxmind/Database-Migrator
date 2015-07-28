@@ -192,7 +192,8 @@ sub _run_one_migration {
     return if $self->dry_run();
 
     my $table = $self->dbh()->quote_identifier( $self->migration_table() );
-    $self->dbh()->do( "INSERT INTO $table (migration) VALUES (?)", undef, $name );
+    $self->dbh()
+        ->do( "INSERT INTO $table (migration) VALUES (?)", undef, $name );
 
     return;
 }
@@ -237,7 +238,7 @@ sub _build_logger {
 sub _build_database_exists {
     my $self = shift;
 
-    return try { $self->_build_dbh() } ? 1 : 0;
+    return try { $self->_build_dbh(); 1 } || 0;
 }
 
 sub _build_dbh {
@@ -246,8 +247,7 @@ sub _build_dbh {
     return DBI->connect(
         'dbi:' . $self->_driver_name() . ':database=' . $self->database(),
         $self->username(),
-        $self->password(),
-        {
+        $self->password(), {
             RaiseError         => 1,
             PrintError         => 1,
             PrintWarn          => 1,
@@ -412,3 +412,5 @@ You can provide a default file name.
 You must return an object with C<debug()> and C<info()> methods.
 
 =back
+
+=cut

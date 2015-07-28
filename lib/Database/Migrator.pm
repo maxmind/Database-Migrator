@@ -5,6 +5,8 @@ use warnings;
 
 our $VERSION = '0.12';
 
+1;
+
 # ABSTRACT: A system for implementing database migrations
 
 __END__
