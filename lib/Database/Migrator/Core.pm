@@ -288,9 +288,9 @@ __END__
   use Moose;
   with 'Database::Migrator::Core';
 
-  sub _build_database_exists { ... }
-  sub _build_dbh             { ... }
-  sub _create_database       { ... }
+  sub _build_database_exists { }
+  sub _build_dbh             { }
+  sub _create_database       { }
 
 =head1 DESCRIPTION
 
