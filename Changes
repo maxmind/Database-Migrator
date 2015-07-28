@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+- Replaced File::Slurp with File::Slurp::Tiny.
+
+
 0.11     2014-04-08
 
 - Changed the logging form Core so that when a database already exists this

@@ -7,7 +7,7 @@ use namespace::autoclean;
 use Database::Migrator::Types qw( ArrayRef Bool Dir File Maybe Str );
 use DBI;
 use Eval::Closure qw( eval_closure );
-use File::Slurp qw( read_file );
+use File::Slurp::Tiny qw( read_file );
 use Log::Dispatch;
 use Moose::Util::TypeConstraints qw( duck_type );
 
