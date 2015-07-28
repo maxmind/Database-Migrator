@@ -12,6 +12,7 @@ use Eval::Closure qw( eval_closure );
 use File::Slurp::Tiny qw( read_file );
 use Log::Dispatch;
 use Moose::Util::TypeConstraints qw( duck_type );
+use Try::Tiny;
 
 use Moose::Role;
 
@@ -236,8 +237,7 @@ sub _build_logger {
 sub _build_database_exists {
     my $self = shift;
 
-    local $@;
-    return eval { $self->_build_dbh() } ? 1 : 0;
+    return try { $self->_build_dbh() } ? 1 : 0;
 }
 
 sub _build_dbh {
