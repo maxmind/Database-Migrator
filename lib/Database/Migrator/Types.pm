@@ -3,6 +3,8 @@ package Database::Migrator::Types;
 use strict;
 use warnings;
 
+our $VERSION = '0.12';
+
 use MooseX::Types::Moose;
 use MooseX::Types::Path::Class;
 use Path::Class ();

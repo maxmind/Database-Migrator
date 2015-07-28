@@ -4,6 +4,8 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
+our $VERSION = '0.12';
+
 use File::Temp qw( tempdir );
 use Database::Migrator::Types qw( ClassName Dir File Str );
 use Log::Dispatch;

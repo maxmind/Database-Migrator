@@ -1,5 +1,10 @@
 package Database::Migrator;
 
+use strict;
+use warnings;
+
+our $VERSION = '0.12';
+
 # ABSTRACT: A system for implementing database migrations
 
 __END__
