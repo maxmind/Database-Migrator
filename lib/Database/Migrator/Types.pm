@@ -18,6 +18,12 @@ __PACKAGE__->provide_types_from(
 
 1;
 
+# ABSTRACT: Type library for use by Database::Migrator
+
+__END__
+
+=pod
+
 =for Pod::Coverage .*
 
 =cut
