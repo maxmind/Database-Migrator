@@ -171,7 +171,7 @@ sub _write_first_migration {
     my $self = shift;
 
     my $dir = $self->_migrations_dir()->subdir('01-first');
-    ## no critic (ValuesAndExpressions::ProhibitLeadingZeros)
+    ## no critic (Lax::ProhibitLeadingZeros::ExceptChmod, ValuesAndExpressions::ProhibitLeadingZeros)
     $dir->mkpath( 0, 0755 );
     ## use critic
 
@@ -204,7 +204,7 @@ sub _write_second_migration {
     my $self = shift;
 
     my $dir = $self->_migrations_dir()->subdir('02-second');
-    ## no critic (ValuesAndExpressions::ProhibitLeadingZeros)
+    ## no critic (Lax::ProhibitLeadingZeros::ExceptChmod, ValuesAndExpressions::ProhibitLeadingZeros)
     $dir->mkpath( 0, 0755 );
     ## use critic
 
@@ -239,7 +239,7 @@ sub _build_migrations_dir {
     my $self = shift;
 
     my $dir = $self->_tempdir()->subdir('migrations');
-    ## no critic (ValuesAndExpressions::ProhibitLeadingZeros)
+    ## no critic (Lax::ProhibitLeadingZeros::ExceptChmod, ValuesAndExpressions::ProhibitLeadingZeros)
     $dir->mkpath( 0, 0755 );
     ## use critic
 
