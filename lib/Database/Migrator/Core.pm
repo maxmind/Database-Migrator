@@ -9,7 +9,6 @@ our $VERSION = '0.12';
 use Database::Migrator::Types qw( ArrayRef Bool Dir File Maybe Str );
 use DBI;
 use Eval::Closure qw( eval_closure );
-use File::Slurp::Tiny qw( read_file );
 use Log::Dispatch;
 use Moose::Util::TypeConstraints qw( duck_type );
 use Try::Tiny;
@@ -179,7 +178,7 @@ sub _run_one_migration {
         else {
             $self->logger()->debug(" - running $basename as perl code");
 
-            my $perl = read_file( $file->stringify() );
+            my $perl = $file->slurp();
 
             my $sub = eval_closure( source => $perl );
 
