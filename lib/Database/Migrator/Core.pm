@@ -11,6 +11,7 @@ use DBI;
 use Eval::Closure qw( eval_closure );
 use Log::Dispatch;
 use Moose::Util::TypeConstraints qw( duck_type );
+use MooseX::Getopt::OptionTypeMap;
 use Try::Tiny;
 
 use Moose::Role;
@@ -237,6 +238,7 @@ sub _build_logger {
 sub _build_database_exists {
     my $self = shift;
 
+    ## no critic (RequireBlockTermination)
     return try { $self->_build_dbh(); 1 } || 0;
 }
 
