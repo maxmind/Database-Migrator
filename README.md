@@ -182,22 +182,20 @@ Please submit bugs to the CPAN RT system at
 http://rt.cpan.org/NoAuth/Bugs.html?Dist=Database-Migrator or via email at
 bug-database-migrator@rt.cpan.org.
 
-Bugs may be submitted through [the RT bug tracker](http://rt.cpan.org/Public/Dist/Display.html?Name=Database-Migrator)
-(or [bug-database-migrator@rt.cpan.org](mailto:bug-database-migrator@rt.cpan.org)).
-
-I am also usually active on IRC as 'drolsky' on `irc://irc.perl.org`.
+Bugs may be submitted through [https://github.com/maxmind/Database-Migrator/issues](https://github.com/maxmind/Database-Migrator/issues).
 
 # AUTHOR
 
-Dave Rolsky &lt;autarch@urth.org>
+Dave Rolsky <autarch@urth.org>
 
-# CONTRIBUTOR
+# CONTRIBUTORS
 
-Olaf Alders &lt;olaf@wundersolutions.com>
+- Gregory Oschwald <goschwald@maxmind.com>
+- Olaf Alders <olaf@wundersolutions.com>
 
-# COPYRIGHT AND LICENCE
+# COPYRIGHT AND LICENSE
 
-This software is Copyright (c) 2016 by MaxMind, Inc.
+This software is Copyright (c) 2012 - 2017 by MaxMind, Inc.
 
 This is free software, licensed under:
 
