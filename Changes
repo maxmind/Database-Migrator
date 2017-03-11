@@ -1,6 +1,7 @@
 {{$NEXT}}
 
-- Replaced File::Slurp with File::Slurp::Tiny.
+- Replaced unnecessary use of File::Slurp with Path::Class::File's slurp
+  method.
 
 
 0.11     2014-04-08

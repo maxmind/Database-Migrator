@@ -9,9 +9,9 @@ our $VERSION = '0.12';
 use Database::Migrator::Types qw( ArrayRef Bool Dir File Maybe Str );
 use DBI;
 use Eval::Closure qw( eval_closure );
-use File::Slurp::Tiny qw( read_file );
 use Log::Dispatch;
 use Moose::Util::TypeConstraints qw( duck_type );
+use MooseX::Getopt::OptionTypeMap;
 use Try::Tiny;
 
 use Moose::Role;
@@ -179,7 +179,7 @@ sub _run_one_migration {
         else {
             $self->logger()->debug(" - running $basename as perl code");
 
-            my $perl = read_file( $file->stringify() );
+            my $perl = $file->slurp();
 
             my $sub = eval_closure( source => $perl );
 
@@ -238,6 +238,7 @@ sub _build_logger {
 sub _build_database_exists {
     my $self = shift;
 
+    ## no critic (RequireBlockTermination)
     return try { $self->_build_dbh(); 1 } || 0;
 }
 
