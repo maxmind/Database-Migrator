@@ -191,6 +191,7 @@ Dave Rolsky <autarch@urth.org>
 # CONTRIBUTORS
 
 - Gregory Oschwald <goschwald@maxmind.com>
+- Kevin Phair <phair.kevin@gmail.com>
 - Olaf Alders <olaf@wundersolutions.com>
 
 # COPYRIGHT AND LICENSE

@@ -1,5 +1,7 @@
 {{$NEXT}}
 
+0.12     2017-03-10
+
 - Replaced unnecessary use of File::Slurp with Path::Class::File's slurp
   method.
 
