@@ -1,5 +1,8 @@
 {{$NEXT}}
 
+- Separated dbh connection configuration from builder into two private
+  attributes, facilitating less invasive subclassing.
+
 0.12     2017-03-10
 
 - Replaced unnecessary use of File::Slurp with Path::Class::File's slurp
