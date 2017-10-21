@@ -82,6 +82,24 @@ has __pending_migrations => (
     },
 );
 
+has _dsn => (
+    traits   => ['NoGetopt'],
+    is => 'ro',
+    isa => Str,
+    init_arg => undef,
+    lazy => 1,
+    builder => '_build_dsn',
+);
+
+has _dbh_attr => (
+    traits   => ['NoGetopt'],
+    is => 'ro',
+    isa => HashRef,
+    init_arg => undef,
+    lazy => 1,
+    builder => '_build_dbh_attr',
+);
+
 has dbh => (
     traits   => ['NoGetopt'],
     is       => 'ro',
@@ -242,18 +260,29 @@ sub _build_database_exists {
     return try { $self->_build_dbh(); 1 } || 0;
 }
 
+sub _build_dsn {
+    my $self = shift;
+
+    return 'dbi:' . $self->_driver_name() . ':database=' . $self->database();
+}
+
+sub _build_dbh_attr {
+    return {
+        RaiseError         => 1,
+        PrintError         => 1,
+        PrintWarn          => 1,
+        ShowErrorStatement => 1,
+    };
+}
+
 sub _build_dbh {
     my $self = shift;
 
     return DBI->connect(
-        'dbi:' . $self->_driver_name() . ':database=' . $self->database(),
+        $self->_dsn(),
         $self->username(),
-        $self->password(), {
-            RaiseError         => 1,
-            PrintError         => 1,
-            PrintWarn          => 1,
-            ShowErrorStatement => 1,
-        },
+        $self->password(),
+        $self->_dbh_attr(),
     );
 }
 
