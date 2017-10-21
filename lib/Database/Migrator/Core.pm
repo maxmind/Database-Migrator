@@ -84,20 +84,20 @@ has __pending_migrations => (
 
 has _dsn => (
     traits   => ['NoGetopt'],
-    is => 'ro',
-    isa => Str,
+    is       => 'ro',
+    isa      => Str,
     init_arg => undef,
-    lazy => 1,
-    builder => '_build_dsn',
+    lazy     => 1,
+    builder  => '_build_dsn',
 );
 
 has _dbh_attr => (
     traits   => ['NoGetopt'],
-    is => 'ro',
-    isa => HashRef,
+    is       => 'ro',
+    isa      => HashRef,
     init_arg => undef,
-    lazy => 1,
-    builder => '_build_dbh_attr',
+    lazy     => 1,
+    builder  => '_build_dbh_attr',
 );
 
 has dbh => (
