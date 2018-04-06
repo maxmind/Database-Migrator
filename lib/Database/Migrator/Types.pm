@@ -3,7 +3,7 @@ package Database::Migrator::Types;
 use strict;
 use warnings;
 
-our $VERSION = '0.13';
+our $VERSION = '0.14';
 
 use MooseX::Types::Moose;
 use MooseX::Types::Path::Class;

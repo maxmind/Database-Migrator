@@ -4,7 +4,7 @@ use strict;
 use warnings;
 use namespace::autoclean;
 
-our $VERSION = '0.13';
+our $VERSION = '0.14';
 
 use Database::Migrator::Types qw( ArrayRef Bool Dir File Maybe Str );
 use DBI;

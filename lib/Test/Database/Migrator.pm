@@ -5,7 +5,7 @@ use warnings;
 use namespace::autoclean;
 use autodie;
 
-our $VERSION = '0.13';
+our $VERSION = '0.14';
 
 use File::Temp qw( tempdir );
 use Database::Migrator::Types qw( ClassName Dir File Str );
