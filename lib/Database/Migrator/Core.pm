@@ -264,6 +264,9 @@ sub _numeric_or_alpha_sort {
     $a_num ||= 0;
     $b_num ||= 0;
 
+    $a_alpha ||= q{};
+    $b_alpha ||= q{};
+
     return ( $a_num <=> $b_num or $a_alpha cmp $b_alpha );
 }
 
