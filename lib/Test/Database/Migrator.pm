@@ -85,6 +85,7 @@ sub _write_ddl_file {
     print {$fh} $ddl
         or die $!;
     close $fh;
+    return;
 }
 
 sub _check_initial_database {
@@ -162,6 +163,7 @@ sub _test_migrations {
         undef,
         'no error running migrator again after migrations have been applied'
     );
+    return;
 }
 
 # This migration writes out two separate files to test that the files in a
