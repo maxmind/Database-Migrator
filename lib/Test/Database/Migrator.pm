@@ -170,8 +170,10 @@ sub _test_migrations {
 
     $self->_new_migrator->create_or_update_database;
 
-    $migrations = $self->_dbh
-        ->selectcol_arrayref('SELECT migration FROM applied_migration') || [];
+    $migrations
+        = $self->_dbh->selectcol_arrayref(
+        'SELECT migration FROM applied_migration')
+        || [];
 
     is_deeply(
         $migrations,
@@ -191,8 +193,10 @@ sub _test_migrations {
         'perl program as migration threw exception due to warning',
     );
 
-    $migrations = $self->_dbh
-        ->selectcol_arrayref('SELECT migration FROM applied_migration') || [];
+    $migrations
+        = $self->_dbh->selectcol_arrayref(
+        'SELECT migration FROM applied_migration')
+        || [];
 
     is_deeply(
         $migrations,
@@ -268,7 +272,7 @@ sub _write_perl_sub_migration {
 
     my $file = $dir->file('migrate.pl'),
 
-    my $migration = <<'EOF';
+        my $migration = <<'EOF';
 use strict;
 use warnings;
 
@@ -297,7 +301,7 @@ sub _write_perl_program_migration {
 
     my $file = $dir->file('migrate.pl'),
 
-    my $migration = <<'EOF';
+        my $migration = <<'EOF';
 #!/usr/bin/env perl
 
 use strict;
