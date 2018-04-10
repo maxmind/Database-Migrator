@@ -165,6 +165,45 @@ sub _test_migrations {
         undef,
         'no error running migrator again after migrations have been applied'
     );
+
+    $self->_write_perl_sub_migration;
+
+    $self->_new_migrator->create_or_update_database;
+
+    $migrations = $self->_dbh
+        ->selectcol_arrayref('SELECT migration FROM applied_migration') || [];
+
+    is_deeply(
+        $migrations,
+        [
+            '01-first',
+            '02-second',
+            '03-third',
+        ],
+        'migrations were recorded in the applied_migration table'
+    );
+
+    $self->_write_perl_program_migration;
+
+    like(
+        exception { $self->_new_migrator->create_or_update_database },
+        qr/Use of uninitialized/,
+        'perl program as migration threw exception due to warning',
+    );
+
+    $migrations = $self->_dbh
+        ->selectcol_arrayref('SELECT migration FROM applied_migration') || [];
+
+    is_deeply(
+        $migrations,
+        [
+            '01-first',
+            '02-second',
+            '03-third',
+        ],
+        'migrations were recorded in the applied_migration table'
+    );
+
     return;
 }
 
@@ -217,6 +256,68 @@ sub _write_second_migration {
 CREATE INDEX baz_baz_name ON baz (baz_name);
 EOF
     close $fh;
+
+    return;
+}
+
+sub _write_perl_sub_migration {
+    my $self = shift;
+
+    my $dir = $self->_migrations_dir->subdir('03-third');
+    $dir->mkpath;
+
+    my $file = $dir->file('migrate.pl'),
+
+    my $migration = <<'EOF';
+use strict;
+use warnings;
+
+sub {
+    my ($migrator) = @_;
+    my $sql = 'CREATE TABLE myperlsub (id INTEGER)';
+    $migrator->dbh->do($sql);
+    return;
+}
+EOF
+
+    $self->_write_ddl_file(
+        $file,
+        $migration,
+    );
+
+    return;
+}
+
+# This program generates a warning and so causes a failure.
+sub _write_perl_program_migration {
+    my $self = shift;
+
+    my $dir = $self->_migrations_dir->subdir('04-fourth');
+    $dir->mkpath;
+
+    my $file = $dir->file('migrate.pl'),
+
+    my $migration = <<'EOF';
+#!/usr/bin/env perl
+
+use strict;
+use warnings;
+
+sub main {
+    my $x;
+    print "hello $x\n";
+    return 1;
+}
+
+exit(main() ? 0 : 1);
+EOF
+
+    $self->_write_ddl_file(
+        $file,
+        $migration,
+    );
+
+    chmod 0755, $file->stringify;
 
     return;
 }
