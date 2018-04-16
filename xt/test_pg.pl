@@ -4,6 +4,9 @@
 #
 # This way Test::Database::Migrator exercises both Database::Migrator and
 # Database::Migrator::Pg.
+#
+# As it depends on Postgres available to run, it's not run automatically.
+# However it is still possibly useful for developers.
 
 package MyMigrator;
 
