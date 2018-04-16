@@ -50,7 +50,6 @@ use warnings;
 
 use Test::Database::Migrator ();
 use Test::More;
-use Try::Tiny qw( catch try );
 
 sub main {
     my $migrator = Test::Database::Migrator->new(
