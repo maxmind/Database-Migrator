@@ -39,6 +39,7 @@ on 'configure' => sub {
 
 on 'develop' => sub {
   requires "Code::TidyAll::Plugin::Test::Vars" => "0.02";
+  requires "Database::Migrator::Pg" => "0";
   requires "File::Spec" => "0";
   requires "IO::Handle" => "0";
   requires "IPC::Open3" => "0";
