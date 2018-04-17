@@ -1,6 +1,7 @@
 requires "DBI" => "0";
 requires "Eval::Closure" => "0";
 requires "File::Temp" => "0";
+requires "IPC::Run3" => "0";
 requires "Log::Dispatch" => "0";
 requires "Log::Dispatch::TestDiag" => "0";
 requires "Moose" => "0";
